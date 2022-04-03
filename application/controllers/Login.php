@@ -41,7 +41,6 @@ class Login extends CI_Controller
             if ($status->is_active != 'N') {
                 $db = $this->Mod_login->check_db($username)->row();
                 $apl = $this->Mod_login->Aplikasi()->row();
-                $prodi = $this->Mod_login->get_prodi($username)->row();
 
                 if (hash_verified(anti_injection($this->input->post('password')), $db->password)) {
                     //cek username dan password yg ada di database
@@ -57,7 +56,6 @@ class Login extends CI_Controller
                         'logo'        => $apl->logo,
                         'nama_owner'     => $apl->nama_owner,
                         'image'       => $db->image,
-                        'prodi'       => $prodi->nama_prodi,
                         'logged_in'    => TRUE,
                         'hak_akses' => ''
                     );
