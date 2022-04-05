@@ -15,8 +15,22 @@ class Arsip extends MY_Controller
         $this->_cek_status();
         $data['judul'] = 'Arsip';
         $data['modal_tambah_arsip'] = show_my_modal('arsip/modal_tambah_arsip', $data);
-        $js = $this->load->view('arsip/arsip-js', null, true);
-        $this->template->views('arsip/home', $data, $js);
+
+        $logged_in = $this->session->userdata('logged_in');
+        if ($logged_in != TRUE || empty($logged_in)) {
+            redirect('login');
+        } else {
+            // $this->template->load('layoutbackend', 'dashboard/view_dashboard', $data);
+            $checklevel = $this->session->userdata('hak_akses');
+
+            if ($checklevel == 'Guest') {
+                $js = $this->load->view('arsip/arsip-guest-js', null, true);
+                $this->template->views('arsip/home-guest', $data, $js);
+            } else {
+                $js = $this->load->view('arsip/arsip-js', null, true);
+                $this->template->views('arsip/home', $data, $js);
+            }
+        }
     }
 
     public function ajax_list()
@@ -50,7 +64,7 @@ class Arsip extends MY_Controller
     public function edit($id)
     {
         $this->_cek_status();
-        $data = $this->Mod_kegiatan->get_kegiatan($id);
+        $data = $this->Mod_arsip->get_data_arsip($id);
         echo json_encode($data);
     }
 
@@ -64,7 +78,7 @@ class Arsip extends MY_Controller
         $this->nama_arsip = $post['nama_arsip'];
 
         if (!empty($_FILES['berkas_arsip']['name'])) {
-            $this->berkas_arsip = $this->_uploadArsip('arsip', 'berkas_arsip');
+            $this->berkas_arsip = $this->_uploadArsip('arsip', 'berkas_arsip', $post['nama_arsip']);
         }
 
         $this->Mod_arsip->insert($this);
@@ -75,13 +89,23 @@ class Arsip extends MY_Controller
     {
         // $this->_cek_status();
         $this->_validate();
-        $id      = $this->input->post('id_kegiatan');
-        $data  = array(
-            'judul'         => $this->input->post('judul'),
-            'tanggal'       => $this->input->post('tanggal'),
-            'keterangan'    => $this->input->post('keterangan'),
-        );
-        $this->Mod_kegiatan->update($id, $data);
+        $id      = $this->input->post('id_arsip');
+        $post = $this->input->post();
+
+        $this->nama_arsip = $post['nama_arsip'];
+
+        if (!empty($_FILES['berkas_arsip']['name']) && empty($post['file_arsip'])) {
+            $this->berkas_arsip = $this->_uploadArsip('arsip', 'berkas_arsip', $post['nama_arsip']);
+        } else if (empty($_FILES['berkas_arsip']['name']) && !empty($post['file_arsip'])) {
+            $this->berkas_arsip = $post['file_arsip'];
+        } else if (!empty($_FILES['berkas_arsip']['name']) && !empty($post['file_arsip'])) {
+            $this->berkas_arsip = $this->_uploadArsip('arsip', 'berkas_arsip', $post['nama_arsip']);
+            unlink('upload/arsip/' . $post['file_arsip']);
+        } else {
+            $this->berkas_arsip = null;
+        }
+
+        $this->Mod_arsip->update($id, $this);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -91,8 +115,8 @@ class Arsip extends MY_Controller
         $id = $this->input->post('id_arsip');
 
         $arsip = $this->Mod_arsip->get_arsip($id)->row_array();
-        if ($arsip != null) {
-            //hapus gambar yg ada diserver
+        if ($arsip['berkas_arsip'] != null) {
+            //hapus arsip yg ada diserver
             unlink('upload/arsip/' . $arsip['berkas_arsip']);
         }
 
@@ -126,13 +150,14 @@ class Arsip extends MY_Controller
         $this->fungsi->validasiAkses($is_login, $hak_akses);
     }
 
-    private function _uploadArsip($folder, $target)
+    private function _uploadArsip($folder, $target, $nama_arsip)
     {
         $format = "%Y-%M-%d--%H-%i-%s";
+        $rand_num = random_string('nozero', 10);
         $config['upload_path']          = './upload/' . $folder . '/';
         $config['allowed_types']        = 'pdf|doc|docx';
         $config['overwrite']            = true;
-        $config['file_name']            = mdate($format);
+        $config['file_name']            = $rand_num . ' - ' . $nama_arsip;
 
         $this->upload->initialize($config);
 

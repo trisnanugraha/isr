@@ -21,25 +21,19 @@
             },
             //Set column definition initialisation properties.
             "columnDefs": [{
-                "targets": [0, 1, 2, 3],
+                "targets": [0, 1, 2],
                 "className": 'text-center'
             }, {
                 "searchable": false,
                 "orderable": false,
                 "targets": 0
             }, {
-                "targets": [-2], //last column
+                "targets": [-1], //last column
                 "render": function(data, type, row) {
                     return row[2] + " <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-success\" href=\"<?php echo site_url('upload/arsip/'); ?>" + row[2] + "\" target=\"_blank\" title=\"Preview\"><i class=\"fas fa-eye\"></i> Preview</a></div>";
                 },
                 "orderable": false, //set not orderable
-            }, {
-                "targets": [-1], //last column
-                "render": function(data, type, row) {
-                    return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[3] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[3] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>";
-                },
-                "orderable": false, //set not orderable
-            }, ],
+            }],
         });
         $("input").change(function() {
             $(this).parent().parent().removeClass('has-error');

@@ -76,9 +76,9 @@ class Mod_arsip extends CI_Model
             ->result();
     }
 
-    function get_kegiatan($id)
+    function get_data_arsip($id)
     {
-        $this->db->where('id_kegiatan', $id);
+        $this->db->where('id_arsip', $id);
         return $this->db->get($this->table)->row();
     }
 
@@ -106,7 +106,7 @@ class Mod_arsip extends CI_Model
 
     function update($id, $data)
     {
-        $this->db->where('id_kegiatan', $id);
+        $this->db->where('id_arsip', $id);
         $this->db->update($this->table, $data);
     }
 

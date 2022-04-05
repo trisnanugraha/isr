@@ -1,6 +1,6 @@
 <!-- Bootstrap modal -->
 <div class="modal fade" id="modal_form" role="dialog" data-backdrop="static">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
 
             <div class="modal-header">
