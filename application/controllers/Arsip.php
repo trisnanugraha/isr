@@ -12,7 +12,6 @@ class Arsip extends MY_Controller
 
     public function index()
     {
-        $this->_cek_status();
         $data['judul'] = 'Arsip';
         $data['modal_tambah_arsip'] = show_my_modal('arsip/modal_tambah_arsip', $data);
 
@@ -20,7 +19,6 @@ class Arsip extends MY_Controller
         if ($logged_in != TRUE || empty($logged_in)) {
             redirect('login');
         } else {
-            // $this->template->load('layoutbackend', 'dashboard/view_dashboard', $data);
             $checklevel = $this->session->userdata('hak_akses');
 
             if ($checklevel == 'Guest') {
@@ -35,7 +33,6 @@ class Arsip extends MY_Controller
 
     public function ajax_list()
     {
-        $this->_cek_status();
         ini_set('memory_limit', '512M');
         set_time_limit(3600);
         $list = $this->Mod_arsip->get_datatables();
@@ -63,14 +60,12 @@ class Arsip extends MY_Controller
 
     public function edit($id)
     {
-        $this->_cek_status();
         $data = $this->Mod_arsip->get_data_arsip($id);
         echo json_encode($data);
     }
 
     public function insert()
     {
-        // $this->_cek_status();
         $this->_validate();
 
         $post = $this->input->post();
@@ -87,7 +82,6 @@ class Arsip extends MY_Controller
 
     public function update()
     {
-        // $this->_cek_status();
         $this->_validate();
         $id      = $this->input->post('id_arsip');
         $post = $this->input->post();
@@ -111,7 +105,6 @@ class Arsip extends MY_Controller
 
     public function delete()
     {
-        $this->_cek_status();
         $id = $this->input->post('id_arsip');
 
         $arsip = $this->Mod_arsip->get_arsip($id)->row_array();
@@ -143,13 +136,6 @@ class Arsip extends MY_Controller
         }
     }
 
-    private function _cek_status()
-    {
-        $is_login = $this->session->userdata('logged_in');
-        $hak_akses = $this->session->userdata('hak_akses');
-        $this->fungsi->validasiAkses($is_login, $hak_akses);
-    }
-
     private function _uploadArsip($folder, $target, $nama_arsip)
     {
         $format = "%Y-%M-%d--%H-%i-%s";
@@ -167,4 +153,4 @@ class Arsip extends MY_Controller
     }
 }
 
-/* End of file Kegiatan.php */
+/* End of file Arsip.php */

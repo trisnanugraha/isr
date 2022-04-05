@@ -15,12 +15,7 @@ class Aktivasiuser extends MY_Controller
     public function index()
     {
         $this->_cek_status();
-        // $id = $this->session->userdata['id_user'];
         $data['judul'] = 'Aktivasi User';
-        // $data['priode'] = $this->Mod_priode->get_all('Aktif');
-        // $data['skema'] = $this->Mod_skema_pkm->get_all();
-        // $data['user'] = $this->Mod_user->get_all_mahasiswa_dosen($id);
-        // $data['modal_tambah_ajuan_pkm'] = show_my_modal('ajuan_pkm/modal_tambah_ajuan_pkm', $data);
         $js = $this->load->view('aktivasi_user/aktivasi-user-js', null, true);
         $this->template->views('aktivasi_user/home', $data, $js);
     }

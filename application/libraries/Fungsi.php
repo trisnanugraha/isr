@@ -69,12 +69,8 @@ class Fungsi
 		if ($logged_in != TRUE || empty($logged_in)) {
 			redirect('login');
 		} else {
-			// $this->template->load('layoutbackend', 'dashboard/view_dashboard', $data);
-
-			if ($checklevel == 'Mahasiswa' || $checklevel == 'Dosen') {
-				redirect('dashboarduser');
-			} else if ($checklevel == 'Reviewer') {
-				redirect('dashboardreviewer');
+			if ($checklevel == 'Guest') {
+				redirect('dashboard');
 			}
 		}
 	}

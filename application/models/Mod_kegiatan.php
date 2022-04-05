@@ -90,14 +90,6 @@ class Mod_kegiatan extends CI_Model
         return $this->db->get();
     }
 
-    function getuser($id_prodi)
-    {
-        $this->db->where('id_prodi', $id_prodi);
-        $this->db->where('is_active', 'Y');
-        $this->db->from('tbl_user');
-        return $this->db->count_all_results();
-    }
-
     function insert($data)
     {
         $insert = $this->db->insert($this->table, $data);

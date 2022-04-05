@@ -12,7 +12,6 @@ class Kegiatan extends MY_Controller
 
     public function index()
     {
-        $this->_cek_status();
         $data['judul'] = 'Kegiatan';
         $data['modal_tambah_kegiatan'] = show_my_modal('kegiatan/modal_tambah_kegiatan', $data);
 
@@ -20,7 +19,6 @@ class Kegiatan extends MY_Controller
         if ($logged_in != TRUE || empty($logged_in)) {
             redirect('login');
         } else {
-            // $this->template->load('layoutbackend', 'dashboard/view_dashboard', $data);
             $checklevel = $this->session->userdata('hak_akses');
 
             if ($checklevel == 'Guest') {
@@ -35,7 +33,6 @@ class Kegiatan extends MY_Controller
 
     public function ajax_list()
     {
-        $this->_cek_status();
         ini_set('memory_limit', '512M');
         set_time_limit(3600);
         $list = $this->Mod_kegiatan->get_datatables();
@@ -63,14 +60,12 @@ class Kegiatan extends MY_Controller
 
     public function edit($id)
     {
-        $this->_cek_status();
         $data = $this->Mod_kegiatan->get_kegiatan($id);
         echo json_encode($data);
     }
 
     public function insert()
     {
-        // $this->_cek_status();
         $this->_validate();
 
         $post = $this->input->post();
@@ -97,7 +92,6 @@ class Kegiatan extends MY_Controller
 
     public function update()
     {
-        // $this->_cek_status();
         $this->_validate();
         $id      = $this->input->post('id_kegiatan');
         $post = $this->input->post();
@@ -153,7 +147,6 @@ class Kegiatan extends MY_Controller
 
     public function delete()
     {
-        $this->_cek_status();
         $id = $this->input->post('id_kegiatan');
 
         $data = $this->Mod_kegiatan->get_foto($id)->row_array();
@@ -197,13 +190,6 @@ class Kegiatan extends MY_Controller
             echo json_encode($data);
             exit();
         }
-    }
-
-    private function _cek_status()
-    {
-        $is_login = $this->session->userdata('logged_in');
-        $hak_akses = $this->session->userdata('hak_akses');
-        $this->fungsi->validasiAkses($is_login, $hak_akses);
     }
 
     private function _uploadFoto($folder, $target)
