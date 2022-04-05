@@ -17,6 +17,8 @@ class Dashboard extends MY_Controller
         $this->load->model('Mod_priode');
         $this->load->model('Mod_data_penelitian');
         $this->load->model('Mod_data_pkm');
+        $this->load->model('Mod_kegiatan');
+        $this->load->model('Mod_arsip');
         $this->load->model('Mod_dashboard');
         // backButtonHandle();
     }
@@ -29,6 +31,8 @@ class Dashboard extends MY_Controller
         $data['penelitian'] = $this->Mod_data_penelitian->total_rows();
         $data['pendinguser'] = $this->Mod_aktivasi_user->total_rows();
         $data['pkm'] = $this->Mod_data_pkm->total_rows();
+        $data['kegiatan'] = $this->Mod_kegiatan->total_rows();
+        $data['arsip'] = $this->Mod_kegiatan->total_rows();
         $data['periode'] = $this->Mod_priode->get_data();
         // $data['dataPenelitian'] = $this->Mod_dashboard->get_total_penelitian($this->getdata());
         // $data['dataPKM'] = $this->Mod_dashboard->get_total_pkm($this->getdata());
@@ -42,14 +46,12 @@ class Dashboard extends MY_Controller
             // $this->template->load('layoutbackend', 'dashboard/view_dashboard', $data);
             $checklevel = $this->_cek_status($this->session->userdata['id_level']);
 
-            if ($checklevel == 'Mahasiswa' || $checklevel == 'Dosen') {
-                redirect('dashboarduser');
-            } else if ($checklevel == 'Reviewer') {
-                redirect('dashboardreviewer');
+            if ($checklevel == 'Guest') {
+                $js = $this->load->view('dashboard/dashboard-js', null, true);
             } else {
                 $js = $this->load->view('dashboard/dashboard-js', null, true);
-                $this->template->views('dashboard/home', $data, $js);
-            }
+                
+            }$this->template->views('dashboard/home', $data, $js);
         }
 
         // echo json_encode($data['dataPenelitian']);

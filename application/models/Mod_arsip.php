@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mod_kegiatan extends CI_Model
+class Mod_arsip extends CI_Model
 {
 
-    var $table = 'tbl_kegiatan';
-    var $column_order = array('', 'judul', 'tanggal');
-    var $column_search = array('judul', 'tanggal');
-    var $order = array('id_kegiatan' => 'asc'); // default order 
+    var $table = 'tbl_arsip';
+    var $column_order = array('', 'nama_arsip', 'berkas_arsip');
+    var $column_search = array('nama_arsip', 'berkas_arsip');
+    var $order = array('id_arsip' => 'asc'); // default order 
 
     public function __construct()
     {
@@ -82,11 +82,11 @@ class Mod_kegiatan extends CI_Model
         return $this->db->get($this->table)->row();
     }
 
-    function get_foto($id)
+    function get_arsip($id)
     {
-        $this->db->select('foto, foto2, foto3');
+        $this->db->select('berkas_arsip');
         $this->db->from($this->table);
-        $this->db->where('id_kegiatan', $id);
+        $this->db->where('id_arsip', $id);
         return $this->db->get();
     }
 
@@ -112,7 +112,7 @@ class Mod_kegiatan extends CI_Model
 
     function delete($id)
     {
-        $this->db->where('id_kegiatan', $id);
+        $this->db->where('id_arsip', $id);
         $this->db->delete($this->table);
     }
 

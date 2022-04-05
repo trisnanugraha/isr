@@ -4,11 +4,11 @@
 
     $(document).ready(function() {
 
-        table = $("#tabelkegiatan").DataTable({
+        table = $("#tabelarsip").DataTable({
             "responsive": true,
             "autoWidth": false,
             "language": {
-                "sEmptyTable": "Data Kegiatan Masih Kosong"
+                "sEmptyTable": "Data Arsip Masih Kosong"
             },
             "processing": true, //Feature control the processing indicator.
             "serverSide": true, //Feature control DataTables' server-side processing mode.
@@ -16,7 +16,7 @@
 
             // Load data for the table's content from an Ajax source
             "ajax": {
-                "url": "<?php echo site_url('kegiatan/ajax_list') ?>",
+                "url": "<?php echo site_url('arsip/ajax_list') ?>",
                 "type": "POST"
             },
             //Set column definition initialisation properties.
@@ -30,7 +30,7 @@
             }, {
                 "targets": [-1], //last column
                 "render": function(data, type, row) {
-                    return "<a class=\"btn btn-xs btn-outline-success\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[3] + ")\"><i class=\"fas fa-eye\"></i> Detail</a><span class=\"mx-1\"></span><div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[3] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[3] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>";
+                    return "<div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[3] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[3] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>";
                 },
                 "orderable": false, //set not orderable
             }, ],
@@ -56,30 +56,15 @@
             $('#label-foto').html(foto);
         });
 
-        $('#foto2').change(function(e) {
-            var foto2 = e.target.files[0].name;
-            $('#label-foto2').html(foto2);
-        });
-
-        $('#foto3').change(function(e) {
-            var foto3 = e.target.files[0].name;
-            $('#label-foto3').html(foto3);
+        $('#berkas_arsip').change(function(e) {
+            var arsip = e.target.files[0].name;
+            $('#label-arsip').html(arsip);
         });
     });
 
     var loadFoto = function(event) {
         var foto = document.getElementById('view_foto');
         foto.href = URL.createObjectURL(event.target.files[0]);
-    };
-
-    var loadFoto2 = function(event) {
-        var foto2 = document.getElementById('view_foto2');
-        foto2.href = URL.createObjectURL(event.target.files[0]);
-    };
-
-    var loadFoto3 = function(event) {
-        var foto3 = document.getElementById('view_foto3');
-        foto3.href = URL.createObjectURL(event.target.files[0]);
     };
 
     function reload_table() {
@@ -108,9 +93,9 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "<?php echo site_url('kegiatan/delete'); ?>",
+                    url: "<?php echo site_url('arsip/delete'); ?>",
                     type: "POST",
-                    data: "id_kegiatan=" + id,
+                    data: "id_arsip=" + id,
                     cache: false,
                     dataType: 'json',
                     success: function(respone) {
@@ -141,19 +126,10 @@
     function add() {
         save_method = 'add';
         $('#form')[0].reset(); // reset form on modals
-        // var foto = document.getElementById('view_foto');
-        // var foto2 = document.getElementById('view_foto2');
-        // var foto3 = document.getElementById('view_foto3');
-        // foto.href = "";
-        // foto2.href = "";
-        // foto3.href = "";
-        // $('#label-foto').text('Pilih File');
-        // $('#label-foto2').text('Pilih File');
-        // $('#label-foto3').text('Pilih File');
         $('.form-group').removeClass('has-error'); // clear error class
         $('.help-block').empty(); // clear error string
         $('#modal_form').modal('show'); // show bootstrap modal
-        $('.modal-title').text('Tambah Kegiatan'); // Set Title to Bootstrap modal title
+        $('.modal-title').text('Tambah Arsip'); // Set Title to Bootstrap modal title
     }
 
     function edit(id) {
@@ -168,35 +144,11 @@
             type: "GET",
             dataType: "JSON",
             success: function(data) {
-                var url = "<?php echo base_url('upload/kegiatan/') ?>"
+
                 $('[name="id_kegiatan"]').val(data.id_kegiatan);
                 $('[name="judul"]').val(data.judul);
                 $('[name="tanggal"]').val(data.tanggal);
                 $('[name="keterangan"]').val(data.keterangan);
-                if (data.foto != null) {
-                    $('#view_foto').attr("href", url + data.foto);
-                    $('#label-foto').text(data.foto);
-                    $('[name="fileFoto1"]').val(data.foto);
-                } else {
-                    $('#view_foto').attr("href", '');
-                }
-
-                if (data.foto2 != null) {
-                    $('#view_foto2').attr("href", url + data.foto2);
-                    $('#label-foto2').text(data.foto2);
-                    $('[name="fileFoto2"]').val(data.foto2);
-                } else {
-                    $('#view_foto2').attr("href", '');
-                }
-
-                if (data.foto3 != null) {
-                    $('#view_foto3').attr("href", url + data.foto3);
-                    $('#label-foto3').text(data.foto3);
-                    $('[name="fileFoto3"]').val(data.foto3);
-                } else {
-                    $('#view_foto3').attr("href", '');
-                }
-
                 $('#modal_form').modal('show'); // show bootstrap modal when complete loaded
                 $('.modal-title').text('Ubah Kegiatan'); // Set title to Bootstrap modal title
 
@@ -207,26 +159,13 @@
         });
     }
 
-    function detail(id) {
-        $.ajax({
-                method: "POST",
-                url: "<?php echo base_url('kegiatan/detail'); ?>",
-                data: "id_kegiatan=" + id,
-            })
-            .done(function(data) {
-                $('#tempat-modal').html(data);
-                $('.modal-title').text('Detail Kegiatan');
-                $('#modal_form_detail').modal('show');
-            })
-    }
-
     function save() {
         $('#btnSave').text('Menyimpan...'); //change button text
         $('#btnSave').attr('disabled', true); //set button disable 
         var url;
 
         if (save_method == 'add') {
-            url = "<?php echo site_url('kegiatan/insert') ?>";
+            url = "<?php echo site_url('arsip/insert') ?>";
         } else {
             url = "<?php echo site_url('kegiatan/update') ?>";
         }
@@ -246,22 +185,10 @@
                 {
                     $('#modal_form').modal('hide');
                     reload_table();
-                    var foto = document.getElementById('view_foto');
-                    var foto2 = document.getElementById('view_foto2');
-                    var foto3 = document.getElementById('view_foto3');
-                    foto.href = "";
-                    foto2.href = "";
-                    foto3.href = "";
-                    $('#label-foto').text('Pilih File');
-                    $('#label-foto2').text('Pilih File');
-                    $('#label-foto3').text('Pilih File');
-                    $('[name="fileFoto1"]').val('');
-                    $('[name="fileFoto2"]').val('');
-                    $('[name="fileFoto3"]').val('');
                     if (save_method == 'add') {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Data Kegiatan Berhasil Disimpan!'
+                            title: 'Data Arsip Berhasil Disimpan!'
                         });
                     } else if (save_method == 'update') {
                         Toast.fire({
@@ -292,20 +219,8 @@
         });
     }
 
-    function batal() {
-        $('#form')[0].reset();
-        reload_table();
-        var foto = document.getElementById('view_foto');
-        var foto2 = document.getElementById('view_foto2');
-        var foto3 = document.getElementById('view_foto3');
-        foto.href = "";
-        foto2.href = "";
-        foto3.href = "";
-        $('#label-foto').text('Pilih File');
-        $('#label-foto2').text('Pilih File');
-        $('#label-foto3').text('Pilih File');
-        $('[name="fileFoto1"]').val('');
-        $('[name="fileFoto2"]').val('');
-        $('[name="fileFoto3"]').val('');
-    }
+    var loadArsip = function(event) {
+        var arsip = document.getElementById('view_arsip');
+        arsip.href = URL.createObjectURL(event.target.files[0]);
+    };
 </script>

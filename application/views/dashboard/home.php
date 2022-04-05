@@ -5,28 +5,28 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3><?php echo $user; ?></h3>
+                        <h3><?php echo $kegiatan; ?></h3>
 
-                        <p>Total User</p>
+                        <p>Total Kegiatan</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <a href="<?php echo base_url('user'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?php echo base_url('kegiatan'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-primary">
                     <div class="inner">
-                        <h3><?php echo $pendinguser; ?></h3>
+                        <h3><?php echo $arsip; ?></h3>
 
-                        <p>Total Pending User</p>
+                        <p>Total Arsip</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-user-check"></i>
+                        <i class="fas fa-archive"></i>
                     </div>
-                    <a href="<?php echo base_url('aktivasiuser'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="<?php echo base_url('arsip'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-6">
@@ -35,26 +35,12 @@
                     <div class="inner">
                         <h3><?php echo $penelitian; ?></h3>
 
-                        <p>Total Data Penelitian</p>
+                        <p>Total ISR</p>
                     </div>
                     <div class="icon">
-                        <i class="fas fa-file"></i>
+                        <i class="fas fa-database"></i>
                     </div>
                     <a href="<?php echo base_url('datapenelitian'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3><?php echo $pkm; ?></h3>
-
-                        <p>Total Data PKM</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-file"></i>
-                    </div>
-                    <a href="<?php echo base_url('datapkm'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
         </div>

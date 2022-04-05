@@ -65,15 +65,9 @@ class Login extends CI_Controller
                     if ($checklevel == 'Admin') {
                         $data['url'] = 'dashboard';
                         $userdata['hak_akses'] = 'Admin';
-                    } else if ($checklevel == 'Mahasiswa') {
-                        $data['url'] = 'dashboarduser';
-                        $userdata['hak_akses'] = 'Mahasiswa';
-                    } else if ($checklevel == 'Dosen') {
-                        $data['url'] = 'dashboarduser';
-                        $userdata['hak_akses'] = 'Dosen';
-                    } else if ($checklevel == 'Reviewer') {
-                        $data['url'] = 'dashboardreviewer';
-                        $userdata['hak_akses'] = 'Reviewer';
+                    } else if ($checklevel == 'Guest') {
+                        $data['url'] = 'dashboard';
+                        $userdata['hak_akses'] = 'Guest';
                     }
 
                     $this->session->set_userdata($userdata);

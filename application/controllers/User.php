@@ -80,7 +80,6 @@ class User extends MY_Controller
                 $gambar = $this->upload->data();
 
                 $save  = array(
-                    'id_prodi' => $this->input->post('id_prodi'),
                     'username' => $this->input->post('username'),
                     'full_name' => $this->input->post('full_name'),
                     'password'  => get_hash($this->input->post('password')),
@@ -93,7 +92,6 @@ class User extends MY_Controller
                 echo json_encode(array("status" => TRUE));
             } else { //Apabila tidak ada gambar yang di upload
                 $save  = array(
-                    'id_prodi' => $this->input->post('id_prodi'),
                     'username' => $this->input->post('username'),
                     'full_name' => $this->input->post('full_name'),
                     'password'  => get_hash($this->input->post('password')),
@@ -148,7 +146,6 @@ class User extends MY_Controller
                 //Jika Password tidak kosong
                 if ($this->input->post('password')) {
                     $save  = array(
-                        'id_prodi' => $this->input->post('id_prodi'),
                         'username' => $this->input->post('username'),
                         'full_name' => $this->input->post('full_name'),
                         'password'  => get_hash($this->input->post('password')),
@@ -158,7 +155,6 @@ class User extends MY_Controller
                     );
                 } else { //Jika password kosong
                     $save  = array(
-                        'id_prodi' => $this->input->post('id_prodi'),
                         'username' => $this->input->post('username'),
                         'full_name' => $this->input->post('full_name'),
                         'id_level'  => $this->input->post('level'),
@@ -182,7 +178,6 @@ class User extends MY_Controller
                 //Jika Password tidak kosong
                 if ($this->input->post('password')) {
                     $save  = array(
-                        'id_prodi' => $this->input->post('id_prodi'),
                         'username' => $this->input->post('username'),
                         'full_name' => $this->input->post('full_name'),
                         'password'  => get_hash($this->input->post('password')),
@@ -191,7 +186,6 @@ class User extends MY_Controller
                     );
                 } else { //Jika password kosong
                     $save  = array(
-                        'id_prodi' => $this->input->post('id_prodi'),
                         'username' => $this->input->post('username'),
                         'full_name' => $this->input->post('full_name'),
                         'id_level'  => $this->input->post('level'),
@@ -207,7 +201,6 @@ class User extends MY_Controller
             $id_user = $this->input->post('id_user');
             if ($this->input->post('password')) {
                 $save  = array(
-                    'id_prodi' => $this->input->post('id_prodi'),
                     'username' => $this->input->post('username'),
                     'full_name' => $this->input->post('full_name'),
                     'password'  => get_hash($this->input->post('password')),
@@ -216,7 +209,6 @@ class User extends MY_Controller
                 );
             } else {
                 $save  = array(
-                    'id_prodi' => $this->input->post('id_prodi'),
                     'username' => $this->input->post('username'),
                     'full_name' => $this->input->post('full_name'),
                     'id_level'  => $this->input->post('level'),
@@ -352,12 +344,6 @@ class User extends MY_Controller
         if ($this->input->post('username') == '') {
             $data['inputerror'][] = 'username';
             $data['error_string'][] = 'Username Tidak Boleh Kosong';
-            $data['status'] = FALSE;
-        }
-
-        if ($this->input->post('id_prodi') == '') {
-            $data['inputerror'][] = 'id_prodi';
-            $data['error_string'][] = 'Program Studi Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 

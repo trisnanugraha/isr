@@ -15,8 +15,22 @@ class Kegiatan extends MY_Controller
         $this->_cek_status();
         $data['judul'] = 'Kegiatan';
         $data['modal_tambah_kegiatan'] = show_my_modal('kegiatan/modal_tambah_kegiatan', $data);
-        $js = $this->load->view('kegiatan/kegiatan-js', null, true);
-        $this->template->views('kegiatan/home', $data, $js);
+
+        $logged_in = $this->session->userdata('logged_in');
+        if ($logged_in != TRUE || empty($logged_in)) {
+            redirect('login');
+        } else {
+            // $this->template->load('layoutbackend', 'dashboard/view_dashboard', $data);
+            $checklevel = $this->session->userdata('hak_akses');
+
+            if ($checklevel == 'Guest') {
+                $js = $this->load->view('kegiatan/kegiatan-guest-js', null, true);
+                $this->template->views('kegiatan/home-guest', $data, $js);
+            } else {
+                $js = $this->load->view('kegiatan/kegiatan-js', null, true);
+                $this->template->views('kegiatan/home', $data, $js);
+            }
+        }
     }
 
     public function ajax_list()
@@ -69,6 +83,14 @@ class Kegiatan extends MY_Controller
             $this->foto = $this->_uploadFoto('kegiatan', 'foto');
         }
 
+        if (!empty($_FILES['foto2']['name'])) {
+            $this->foto2 = $this->_uploadFoto('kegiatan', 'foto2');
+        }
+
+        if (!empty($_FILES['foto3']['name'])) {
+            $this->foto3 = $this->_uploadFoto('kegiatan', 'foto3');
+        }
+
         $this->Mod_kegiatan->insert($this);
         echo json_encode(array("status" => TRUE));
     }
@@ -78,13 +100,55 @@ class Kegiatan extends MY_Controller
         // $this->_cek_status();
         $this->_validate();
         $id      = $this->input->post('id_kegiatan');
-        $data  = array(
-            'judul'         => $this->input->post('judul'),
-            'tanggal'       => $this->input->post('tanggal'),
-            'keterangan'    => $this->input->post('keterangan'),
-        );
-        $this->Mod_kegiatan->update($id, $data);
+        $post = $this->input->post();
+
+        $this->judul = $post['judul'];
+        $this->tanggal = $post['tanggal'];
+        $this->keterangan = $post['keterangan'];
+
+        if (!empty($_FILES['foto']['name']) && empty($post['fileFoto1'])) {
+            $this->foto = $this->_uploadFoto('kegiatan', 'foto');
+        } else if (empty($_FILES['foto']['name']) && !empty($post['fileFoto1'])) {
+            $this->foto = $post['fileFoto1'];
+        } else if (!empty($_FILES['foto']['name']) && !empty($post['fileFoto1'])) {
+            $this->foto = $this->_uploadFoto('kegiatan', 'foto');
+            unlink('upload/kegiatan/' . $post['fileFoto1']);
+        } else {
+            $this->foto = null;
+        }
+
+        if (!empty($_FILES['foto2']['name']) && empty($post['fileFoto2'])) {
+            $this->foto2 = $this->_uploadFoto('kegiatan', 'foto2');
+        } else if (empty($_FILES['foto2']['name']) && !empty($post['fileFoto2'])) {
+            $this->foto2 = $post['fileFoto2'];
+        } else if (!empty($_FILES['foto2']['name']) && !empty($post['fileFoto2'])) {
+            $this->foto2 = $this->_uploadFoto('kegiatan', 'foto2');
+            unlink('upload/kegiatan/' . $post['fileFoto2']);
+        } else {
+            $this->foto2 = null;
+        }
+
+        if (!empty($_FILES['foto3']['name']) && empty($post['fileFoto3'])) {
+            $this->foto3 = $this->_uploadFoto('kegiatan', 'foto3');
+        } else if (empty($_FILES['foto3']['name']) && !empty($post['fileFoto3'])) {
+            $this->foto3 = $post['fileFoto3'];
+        } else if (!empty($_FILES['foto3']['name']) && !empty($post['fileFoto3'])) {
+            $this->foto3 = $this->_uploadFoto('kegiatan', 'foto3');
+            unlink('upload/kegiatan/' . $post['fileFoto3']);
+        } else {
+            $this->foto3 = null;
+        }
+
+        $this->Mod_kegiatan->update($id, $this);
         echo json_encode(array("status" => TRUE));
+    }
+
+    public function detail()
+    {
+        $id = trim($_POST['id_kegiatan']);
+        $data = $this->Mod_kegiatan->get_kegiatan($id);
+
+        echo show_my_modal('kegiatan/modal_detail_kegiatan', $data);
     }
 
     public function delete()
@@ -92,10 +156,18 @@ class Kegiatan extends MY_Controller
         $this->_cek_status();
         $id = $this->input->post('id_kegiatan');
 
-        $foto = $this->Mod_kegiatan->get_foto($id)->row_array();
-        if ($foto != null) {
+        $data = $this->Mod_kegiatan->get_foto($id)->row_array();
+        if ($data['foto'] != null) {
             //hapus gambar yg ada diserver
-            unlink('upload/kegiatan/' . $foto['foto']);
+            unlink('upload/kegiatan/' . $data['foto']);
+        }
+        if ($data['foto2'] != null) {
+            //hapus gambar yg ada diserver
+            unlink('upload/kegiatan/' . $data['foto2']);
+        }
+        if ($data['foto3'] != null) {
+            //hapus gambar yg ada diserver
+            unlink('upload/kegiatan/' . $data['foto3']);
         }
 
         $this->Mod_kegiatan->delete($id);
@@ -137,10 +209,11 @@ class Kegiatan extends MY_Controller
     private function _uploadFoto($folder, $target)
     {
         $format = "%Y-%M-%d--%H-%i";
+        $rand_num = random_string('nozero', 10);
         $config['upload_path']          = './upload/' . $folder . '/';
         $config['allowed_types']        = 'jpg|png';
         $config['overwrite']            = true;
-        $config['file_name']            = mdate($format);
+        $config['file_name']            = $rand_num . ' - ' . mdate($format);
 
         $this->upload->initialize($config);
 
