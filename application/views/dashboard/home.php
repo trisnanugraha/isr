@@ -33,7 +33,7 @@
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3><?php echo 0; ?></h3>
+                        <h3><?php echo $isr; ?></h3>
 
                         <p>Total ISR</p>
                     </div>
