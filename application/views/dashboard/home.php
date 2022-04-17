@@ -50,7 +50,7 @@
             <div class="col-md-6">
                 <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title col-form-label">Data Grafik Priode</h3>
+                        <h3 class="card-title col-form-label">Data Grafik Kegiatan</h3>
                         <div class="card-tools col-sm-4">
                             <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
@@ -58,7 +58,7 @@
                             <button type="button" class="btn btn-tool" data-card-widget="remove">
                                 <i class="fas fa-times"></i>
                             </button> -->
-                            <div>
+                            <!-- <div>
                                 <select class="form-control select2" name="priode" id="priode">
                                     <option value="" selected disabled>Pilih Priode</option>
                                     <?php
@@ -66,7 +66,7 @@
                                         <option value="<?= $pr->id_priode; ?>"><?= $pr->priode; ?></option>
                                     <?php } ?>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="card-body pb-0" style="display: block;">

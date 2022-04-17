@@ -9,11 +9,13 @@ class Isr extends MY_Controller
         parent::__construct();
         $this->load->model('Mod_isr');
         $this->load->model('Mod_detail_isr');
+        $this->load->model('Mod_cluster');
     }
 
     public function index()
     {
         $data['judul'] = 'ISR';
+        $data['cluster'] = $this->Mod_cluster->get_all();
         $data['modal_tambah_isr'] = show_my_modal('isr/modal_tambah_isr', $data);
 
         $logged_in = $this->session->userdata('logged_in');
@@ -44,6 +46,7 @@ class Isr extends MY_Controller
             $row = array();
             $row[] = $no;
             $row[] = $isr->induk_isr;
+            $row[] = $isr->nama_cluster;
             $row[] = $isr->id_isr;
             $data[] = $row;
         }
@@ -69,8 +72,11 @@ class Isr extends MY_Controller
 
     public function insert()
     {
+        $this->_validate();
+
         $save = array(
-            'induk_isr' => $this->input->post('induk_isr')
+            'induk_isr' => $this->input->post('induk_isr'),
+            'id_cluster' => $this->input->post('cluster')
         );
 
         $get_id_isr = $this->Mod_isr->insert($save);
@@ -110,7 +116,8 @@ class Isr extends MY_Controller
     {
         $id = $this->input->post('id_isr');
         $save = array(
-            'induk_isr' => $this->input->post('induk_isr')
+            'induk_isr' => $this->input->post('induk_isr'),
+            'id_cluster' => $this->input->post('cluster')
         );
 
         $this->Mod_isr->update($id, $save);
@@ -253,9 +260,15 @@ class Isr extends MY_Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if ($this->input->post('nama_arsip') == '') {
-            $data['inputerror'][] = 'nama_arsip';
-            $data['error_string'][] = 'Nama Arsip Tidak Boleh Kosong';
+        if ($this->input->post('induk_isr') == '') {
+            $data['inputerror'][] = 'induk_isr';
+            $data['error_string'][] = 'Induk ISR Tidak Boleh Kosong';
+            $data['status'] = FALSE;
+        }
+
+        if ($this->input->post('cluster') == '') {
+            $data['inputerror'][] = 'cluster';
+            $data['error_string'][] = 'Cluster Tidak Boleh Kosong';
             $data['status'] = FALSE;
         }
 

@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mod_isr extends CI_Model
+class Mod_cluster extends CI_Model
 {
 
-    var $table = 'tbl_isr';
-    var $column_order = array('', 'induk_isr', 'nama_cluster');
-    var $column_search = array('induk_isr', 'nama_cluster');
-    var $order = array('id_isr' => 'asc'); // default order 
+    var $table = 'tbl_cluster';
+    var $column_order = array('', 'nama_cluster');
+    var $column_search = array('nama_cluster');
+    var $order = array('id_cluster' => 'asc'); // default order 
 
     public function __construct()
     {
@@ -16,12 +16,7 @@ class Mod_isr extends CI_Model
     }
     private function _get_datatables_query()
     {
-        $this->db->select('a.*,b.nama_cluster');
-        $this->db->join('tbl_cluster b', 'a.id_cluster=b.id_cluster');
-        if ($this->input->post('cluster')) {
-            $this->db->where('b.id_cluster', $this->input->post('cluster'));
-        }
-        $this->db->from("{$this->table} a");
+        $this->db->from($this->table);
         $i = 0;
 
         foreach ($this->column_search as $item) // loop column 
@@ -81,30 +76,27 @@ class Mod_isr extends CI_Model
             ->result();
     }
 
-    function get_data_isr($id)
+    function get_cluster($id)
     {
-        $this->db->select('a.*,b.nama_cluster');
-        $this->db->join('tbl_cluster b', 'a.id_cluster=b.id_cluster');
-        $this->db->from("{$this->table} a");
-        $this->db->where('a.id_isr', $id);
+        $this->db->where('id_cluster', $id);
         return $this->db->get($this->table)->row();
     }
 
     function insert($data)
     {
-        $this->db->insert($this->table, $data);
-        return $this->db->insert_id();
+        $insert = $this->db->insert($this->table, $data);
+        return $insert;
     }
 
     function update($id, $data)
     {
-        $this->db->where('id_isr', $id);
+        $this->db->where('id_cluster', $id);
         $this->db->update($this->table, $data);
     }
 
     function delete($id)
     {
-        $this->db->where('id_isr', $id);
+        $this->db->where('id_cluster', $id);
         $this->db->delete($this->table);
     }
 
@@ -115,4 +107,4 @@ class Mod_isr extends CI_Model
     }
 }
 
-/* End of file Mod_isr.php */
+/* End of file Mod_cluster.php */

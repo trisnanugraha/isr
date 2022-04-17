@@ -13,6 +13,7 @@
             <div class="modal-body form">
                 <form action="#" id="form" class="form-horizontal">
                     <input type="hidden" value="" name="id_isr" />
+                    <p>Cluster : <strong><?php echo $isr->nama_cluster; ?></strong></p>
                     <table class="table table-bordered">
                         <thead>
                             <tr>

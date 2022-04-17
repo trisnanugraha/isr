@@ -6,6 +6,8 @@
 
     $(document).ready(function() {
 
+        $('#form-filter')[0].reset();
+
         table = $("#tabelisr").DataTable({
             "responsive": true,
             "autoWidth": false,
@@ -19,11 +21,14 @@
             // Load data for the table's content from an Ajax source
             "ajax": {
                 "url": "<?php echo site_url('isr/ajax_list') ?>",
-                "type": "POST"
+                "type": "POST",
+                "data": function(data) {
+                    data.cluster = $('#cluster').val();
+                }
             },
             //Set column definition initialisation properties.
             "columnDefs": [{
-                "targets": [0, 1, 2],
+                "targets": [0, 1, 2, 3],
                 "className": 'text-center'
             }, {
                 "searchable": false,
@@ -32,7 +37,7 @@
             }, {
                 "targets": [-1], //last column
                 "render": function(data, type, row) {
-                    return "<a class=\"btn btn-xs btn-outline-success\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[2] + ")\"><i class=\"fas fa-eye\"></i> Detail</a><span class=\"mx-1\"></span><div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[2] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[2] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>";
+                    return "<a class=\"btn btn-xs btn-outline-success\" href=\"javascript:void(0)\" title=\"Detail\" onclick=\"detail(" + row[3] + ")\"><i class=\"fas fa-eye\"></i> Detail</a><span class=\"mx-1\"></span><div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-primary\" href=\"javascript:void(0)\" title=\"Edit\" onclick=\"edit(" + row[3] + ")\"><i class=\"fas fa-edit\"></i> Ubah</a></div> <div class=\"d-inline mx-1\"><a class=\"btn btn-xs btn-outline-danger\" href=\"javascript:void(0)\" title=\"Delete\" onclick=\"del(" + row[3] + ")\"><i class=\"fas fa-trash\"></i> Hapus</a></div>";
                 },
                 "orderable": false, //set not orderable
             }, ],
@@ -52,22 +57,7 @@
             $(this).next().empty();
             $(this).removeClass('is-invalid');
         });
-
-        $('#foto').change(function(e) {
-            var foto = e.target.files[0].name;
-            $('#label-foto').html(foto);
-        });
-
-        $('#berkas_arsip').change(function(e) {
-            var arsip = e.target.files[0].name;
-            $('#label-arsip').html(arsip);
-        });
     });
-
-    var loadFoto = function(event) {
-        var foto = document.getElementById('view_foto');
-        foto.href = URL.createObjectURL(event.target.files[0]);
-    };
 
     function tambah_data() {
         var new_id = i++;
@@ -158,6 +148,15 @@
         })
     }
 
+    $('#btn-filter').click(function() { //button filter event click
+        table.ajax.reload(); //just reload table
+    });
+
+    $('#btn-reset').click(function() { //button reset event click
+        $('#form-filter')[0].reset();
+        table.ajax.reload(); //just reload table
+    });
+
     function add() {
         save_method = 'add';
         $('#form')[0].reset(); // reset form on modals
@@ -194,6 +193,7 @@
             success: function(data) {
                 $('[name="id_isr"]').val(data['isr'].id_isr);
                 $('[name="induk_isr"]').val(data['isr'].induk_isr);
+                $('[name="cluster"]').val(data['isr'].id_cluster);
 
                 var myObj = data['isrDetail']
                 $.each(myObj, function(key, value) {
@@ -263,6 +263,7 @@
                 isr_rx: isr_rx,
                 actual_tx: actual_tx,
                 actual_rx: actual_rx,
+                cluster: $("#cluster").val()
             };
         } else {
             url = "<?php echo site_url('isr/update') ?>";
@@ -277,7 +278,8 @@
                 isr_rx: isr_rx,
                 actual_tx: actual_tx,
                 actual_rx: actual_rx,
-                delete_data: temp_id
+                delete_data: temp_id,
+                cluster: $("#cluster").val()
             };
         }
 

@@ -14,7 +14,19 @@
                 <form action="#" id="form" class="form-horizontal">
                     <input type="hidden" value="" name="id_isr" id="id_isr" />
                     <div class="form-group row ">
-                        <div class="col-sm-12">
+                        <div class="col-sm-12 kosong">
+                            <label for="cluster" class="col-form-label">Cluster</label>
+                            <select class="form-control select2" name="cluster" id="cluster">
+                                <option value="0" selected disabled>-- Pilih Cluster --</option>
+                                <?php
+                                foreach ($cluster as $c) { ?>
+                                    <option value="<?= $c->id_cluster; ?>"><?= $c->nama_cluster; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row ">
+                        <div class="col-sm-12 kosong">
                             <label for="induk_isr" class="col-form-label">Induk ISR</label>
                             <input type="text" class="form-control" name="induk_isr" id="induk_isr" placeholder="Induk ISR">
                         </div>
