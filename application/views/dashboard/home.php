@@ -43,6 +43,20 @@
                     <a href="<?php echo base_url('isr'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3><?php echo $cluster; ?></h3>
+
+                        <p>Total Cluster</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <a href="<?php echo base_url('cluster'); ?>" class="small-box-footer">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
         </div>
         <br>
         <div id="graph"></div>

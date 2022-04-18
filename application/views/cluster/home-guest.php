@@ -6,13 +6,11 @@
                 <div class="card">
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="tabelkegiatan" class="table table-bordered table-striped table-hover">
+                        <table id="tabelcluster" class="table table-bordered table-striped table-hover">
                             <thead>
                                 <tr class="bg-info text-center">
                                     <th>No.</th>
-                                    <th>Judul</th>
-                                    <th>Tanggal</th>
-                                    <th>Aksi</th>
+                                    <th>Nama Cluster</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -29,4 +27,3 @@
     </div>
     <!-- /.container-fluid -->
 </section>
-<div id="tempat-modal"></div>

@@ -17,6 +17,7 @@ class Dashboard extends MY_Controller
         $this->load->model('Mod_kegiatan');
         $this->load->model('Mod_arsip');
         $this->load->model('Mod_isr');
+        $this->load->model('Mod_cluster');
         $this->load->model('Mod_dashboard');
         // backButtonHandle();
     }
@@ -27,6 +28,7 @@ class Dashboard extends MY_Controller
         $data['kegiatan'] = $this->Mod_kegiatan->total_rows();
         $data['arsip'] = $this->Mod_arsip->total_rows();
         $data['isr'] = $this->Mod_isr->total_rows();
+        $data['cluster'] = $this->Mod_cluster->total_rows();
 
         $logged_in = $this->session->userdata('logged_in');
         if ($logged_in != TRUE || empty($logged_in)) {

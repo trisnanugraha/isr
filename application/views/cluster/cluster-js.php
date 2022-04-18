@@ -50,37 +50,7 @@
             $(this).next().empty();
             $(this).removeClass('is-invalid');
         });
-
-        $('#foto').change(function(e) {
-            var foto = e.target.files[0].name;
-            $('#label-foto').html(foto);
-        });
-
-        $('#foto2').change(function(e) {
-            var foto2 = e.target.files[0].name;
-            $('#label-foto2').html(foto2);
-        });
-
-        $('#foto3').change(function(e) {
-            var foto3 = e.target.files[0].name;
-            $('#label-foto3').html(foto3);
-        });
     });
-
-    var loadFoto = function(event) {
-        var foto = document.getElementById('view_foto');
-        foto.href = URL.createObjectURL(event.target.files[0]);
-    };
-
-    var loadFoto2 = function(event) {
-        var foto2 = document.getElementById('view_foto2');
-        foto2.href = URL.createObjectURL(event.target.files[0]);
-    };
-
-    var loadFoto3 = function(event) {
-        var foto3 = document.getElementById('view_foto3');
-        foto3.href = URL.createObjectURL(event.target.files[0]);
-    };
 
     function reload_table() {
         table.ajax.reload(null, false); //reload datatable ajax 
@@ -170,19 +140,6 @@
                 alert('Error get data from ajax');
             }
         });
-    }
-
-    function detail(id) {
-        $.ajax({
-                method: "POST",
-                url: "<?php echo base_url('kegiatan/detail'); ?>",
-                data: "id_kegiatan=" + id,
-            })
-            .done(function(data) {
-                $('#tempat-modal').html(data);
-                $('.modal-title').text('Detail Kegiatan');
-                $('#modal_form_detail').modal('show');
-            })
     }
 
     function save() {
