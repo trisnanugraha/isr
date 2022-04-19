@@ -16,7 +16,8 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/adminlte.min.css">
   <!-- Body style -->
-  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/stylearyo.css">
+  <!-- <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/stylearyo.css"> -->
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/dist/css/custom-style.css">
   <!-- iCheck -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/iCheck/square/blue.css">
   <!-- Google Font: Source Sans Pro -->
@@ -27,7 +28,7 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/plugins/toastr/toastr.min.css">
 </head>
 
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" id="bg-login">
   <div class="login-box">
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
