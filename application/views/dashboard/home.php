@@ -65,22 +65,20 @@
                 <div class="card card-success">
                     <div class="card-header">
                         <h3 class="card-title col-form-label">Data Grafik Kegiatan</h3>
-                        <div class="card-tools col-sm-4">
+                        <div class="card-tools col-md-6">
                             <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
                             <button type="button" class="btn btn-tool" data-card-widget="remove">
                                 <i class="fas fa-times"></i>
                             </button> -->
-                            <!-- <div>
-                                <select class="form-control select2" name="priode" id="priode">
-                                    <option value="" selected disabled>Pilih Priode</option>
+                            <div class="col-md-12"><select class="form-control select2" name="tahun" id="tahun">
+                                    <option value="" selected disabled>Pilih Tahun</option>
                                     <?php
-                                    foreach ($periode as $pr) { ?>
-                                        <option value="<?= $pr->id_priode; ?>"><?= $pr->priode; ?></option>
+                                    foreach ($filterTahun as $t) { ?>
+                                        <option value="<?= $t->tahun; ?>"><?= $t->tahun; ?></option>
                                     <?php } ?>
-                                </select>
-                            </div> -->
+                                </select></div>
                         </div>
                     </div>
                     <div class="card-body pb-0" style="display: block;">

@@ -19,6 +19,7 @@ class Dashboard extends MY_Controller
         $this->load->model('Mod_isr');
         $this->load->model('Mod_cluster');
         $this->load->model('Mod_dashboard');
+        $this->load->model('Mod_bulan');
         // backButtonHandle();
     }
 
@@ -29,6 +30,21 @@ class Dashboard extends MY_Controller
         $data['arsip'] = $this->Mod_arsip->total_rows();
         $data['isr'] = $this->Mod_isr->total_rows();
         $data['cluster'] = $this->Mod_cluster->total_rows();
+        // $tahun = $this->Mod_kegiatan->get_tahun();
+
+        // foreach ($tahun as $row) {
+        //     $data = explode('-', $row['tanggal']);
+        //     $th[] = $data[0];
+        // }
+
+        // echo json_encode($th);
+
+        $data['filterTahun'] = $this->db->select('DISTINCT DATE_FORMAT(`t`.`tanggal`, "%Y") `tahun`', FALSE)->from('tbl_kegiatan `t`')->group_by('YEAR(`t`.`tanggal`)')->order_by('t.tanggal', 'DESC')->get()->result();
+
+
+        // echo '<pre>';
+        // print_r($data['grafik']);
+        // print_r($data['filterTahun']);
 
         $logged_in = $this->session->userdata('logged_in');
         if ($logged_in != TRUE || empty($logged_in)) {
@@ -41,8 +57,8 @@ class Dashboard extends MY_Controller
                 $js = $this->load->view('dashboard/dashboard-js', null, true);
             } else {
                 $js = $this->load->view('dashboard/dashboard-js', null, true);
-                
-            }$this->template->views('dashboard/home', $data, $js);
+            }
+            $this->template->views('dashboard/home', $data, $js);
         }
 
         // echo json_encode($data['dataPenelitian']);
@@ -58,46 +74,15 @@ class Dashboard extends MY_Controller
 
     function fetch_data()
     {
-        $penelitian = [];
-        $pkm = [];
-
-        $id = $_POST['idPriode'];
+        $tahun = $_POST['tahun'];
         // echo json_encode($id);
-        if ($id != null) {
-            // $penelitian = [];
-            $dataPenelitian = $this->Mod_dashboard->get_total_penelitian($id);
-            $dataPKM = $this->Mod_dashboard->get_total_pkm($id);
-            $dataPriode = $this->Mod_priode->get_priode($id);
+        if ($tahun != null) {
+            $data['bulan'] = $this->Mod_bulan->get_data();
+            $data['tahun'] = $tahun;
+            $data['grafik'] = $this->Mod_dashboard->get_grafik($tahun);
 
-            foreach ($dataPenelitian->result() as $row) {
-                $penelitian['nama_level'][] = $row->nama_level;
-                $penelitian['total'][] = (int) $row->total;
-            }
-
-            // $data['dataPenelitian'] = json_encode($penelitian);
-
-            // foreach ($dataPenelitian->result_array() as $row) {
-            //     $output[] = array(
-            //         'nama_lv'  => $row["nama_level"],
-            //         'total' => $row["total"]
-            //     );
-            // }
-
-            // return $penelitian;
-            foreach ($dataPKM->result() as $row) {
-                $penelitian['nama_level_pkm'][] = $row->nama_level;
-                $penelitian['totalPKM'][] = (int) $row->total;
-            }
-
-            $penelitian['priode'][] = $dataPriode->priode;
-
-            echo json_encode($penelitian);
-            // foreach ($dataPriode->result_array() as $priode) {
-            //     $output[] = array(
-            //         'priode' => $priode["priode"]
-            //     );
-            // }
-
+            echo json_encode($data);
+ 
 
         }
         // echo json_encode($output);

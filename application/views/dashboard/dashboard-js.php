@@ -5,82 +5,56 @@
     var totalPKM = [];
 
     $(document).ready(function() {
-        $('#priode').select2({
-            placeholder: "-- Pilih Priode --"
+        $('#tahun').select2({
+            placeholder: "-- Tahun --"
         });
         filter();
         // init();
     })
 
     function filter() {
-        $('#priode').change(function() {
+        $('#tahun').change(function() {
             filtering = $(this).val();
-            // console.log(filtering)
+            console.log(filtering)
             // init(filtering)
 
             $.ajax({
                 url: "<?php echo site_url('dashboard/fetch_data') ?>",
                 type: "POST",
-                data: "idPriode=" + filtering,
+                data: "tahun=" + filtering,
                 dataType: "JSON",
                 success: function(data) {
                     // draw(data)
                     var ctx = document.getElementById("chartData").getContext("2d");
-                    // var cData = JSON.parse(data);
-                    // console.log(cData)
 
-                    // // var color = [];
+                    var bulan = [];
+                    var total = [];
 
-                    nama_lv = data.nama_level;
-                    totalPenelitian = data.total;
-                    totalPKM = data.totalPKM;
+                    // for (var i in data.bulan) {
+                    //     bulan.push(data.bulan[i].nama_bulan);
+                    // }
 
-                    // console.log(nama_lv)
+                    for (var i in data.grafik) {
+                        bulan.push(data.grafik[i].bulan);
+                        total.push(data.grafik[i].total);
+                    }
 
-                    if (totalPenelitian != undefined && totalPKM != undefined) {
+                    if (data.grafik != undefined) {
                         var dataload = {
-                            labels: nama_lv,
+                            labels: bulan,
                             datasets: [{
-                                label: 'Penelitian',
-                                data: totalPenelitian,
-                                backgroundColor: 'rgb(255, 99, 132)',
-                                borderColor: 'rgb(255, 99, 132)',
-                            }, {
-                                label: 'PKM',
-                                data: totalPKM,
-                                backgroundColor: 'rgba(56, 86, 255, 0.87)',
-                                borderColor: 'rgba(56, 86, 255, 0.87)',
-                            }],
-                        }
-                    } else if (totalPenelitian != undefined && totalPKM == undefined) {
-                        var dataload = {
-                            labels: nama_lv,
-                            datasets: [{
-                                label: 'Penelitian',
-                                data: totalPenelitian,
-                                backgroundColor: 'rgb(255, 99, 132)',
-                                borderColor: 'rgb(255, 99, 132)',
-                            }],
-                        }
-                    } else if (totalPenelitian == undefined && totalPKM != undefined) {
-                        var dataload = {
-                            labels: data.nama_level_pkm,
-                            datasets: [{
-                                label: 'PKM',
-                                data: totalPKM,
+                                label: 'Total Data',
+                                data: total,
                                 backgroundColor: 'rgba(56, 86, 255, 0.87)',
                                 borderColor: 'rgba(56, 86, 255, 0.87)',
                             }],
                         }
                     }
 
-
-
-
                     var options = {
                         title: {
                             display: true,
-                            text: "Data Priode " + data.priode
+                            text: "Data Kegiatan " + data.tahun
                         },
                         scales: {
                             yAxes: [{

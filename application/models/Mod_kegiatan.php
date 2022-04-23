@@ -76,6 +76,23 @@ class Mod_kegiatan extends CI_Model
             ->result();
     }
 
+    function get_tahun()
+    {
+        $this->db->select('tanggal');
+        $this->db->group_by('YEAR(tanggal)');
+        return $this->db->get($this->table)
+            ->result();
+    }
+
+    function get_bulan()
+    {
+        $this->db->select('tanggal');
+        $this->db->group_by('MONTH(tanggal)');
+        return $this->db->get($this->table)
+            ->result();
+    }
+
+
     function get_kegiatan($id)
     {
         $this->db->where('id_kegiatan', $id);
